@@ -132,10 +132,10 @@ public class Login extends AppCompatActivity {
                     }
             };
 
-    private String urlinput = "http://128.235.163.180:8080/SmartBus/TestInput";
-    private String urlhold = "http://128.235.163.180:8080/SmartBus/TestHoldQuery";
-    private String urlquery = "http://128.235.163.180:8080/SmartBus/TestQuery";
-    private String urlrc = "http://128.235.163.180:8080/SmartBus/TestRoute";
+    private String urlinput = "http://***.***.***.***:8080/SmartBus/TestInput";
+    private String urlhold = "http://***.***.***.***:8080/SmartBus/TestHoldQuery";
+    private String urlquery = "http://***.***.***.***:8080/SmartBus/TestQuery";
+    private String urlrc = "http://***.***.***.***:8080/SmartBus/TestRoute";
     private String android_id = null;
 
 
