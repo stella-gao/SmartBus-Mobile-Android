@@ -84,6 +84,8 @@ public class Login extends AppCompatActivity {
     private Spinner mDStop = null;
     private Spinner mDDir = null;
 
+    private AlertDialog dialog;
+
     private String[] soroute = new String[]{"M5", "M20", "M21"};
 
     private String[][] sodir = new String[][]
@@ -132,10 +134,10 @@ public class Login extends AppCompatActivity {
                     }
             };
 
-    private String urlinput = "http://***.***.***.***:8080/SmartBus/TestInput";
-    private String urlhold = "http://***.***.***.***:8080/SmartBus/TestHoldQuery";
-    private String urlquery = "http://***.***.***.***:8080/SmartBus/TestQuery";
-    private String urlrc = "http://***.***.***.***:8080/SmartBus/TestRoute";
+    private String urlinput = "http://128.235.163.140:8080/SmartBus/TestInput";
+    private String urlhold = "http://128.235.163.140:8080/SmartBus/TestHoldQuery";
+    private String urlquery = "http://128.235.163.140:8080/SmartBus/TestQuery";
+    private String urlrc = "http://128.235.163.140:8080/SmartBus/TestRoute";
     private String android_id = null;
 
 
@@ -471,13 +473,15 @@ public class Login extends AppCompatActivity {
             String val = data.getString("delayvalue");
 
             final TextView delay = (TextView) findViewById(R.id.delay);
-            String cur = "", next = "", none = "";
+            String cur = "", next = "", none = "", toid = "", odid = "";
             try {
                 JSONArray jsonArray = new JSONArray(val);
                 for (int i = 0; i < jsonArray.length(); i++) {
                     JSONObject jsonObject = jsonArray.getJSONObject(i);
                     cur = jsonObject.getString("podBusArrT");
                     next = jsonObject.getString("ptoBusArrT");
+                    toid = jsonObject.getString("p_tosp_id");
+                    odid = jsonObject.getString("p_odsp_id");
                     none = jsonObject.getString("warn");
 
                 }
@@ -486,7 +490,7 @@ public class Login extends AppCompatActivity {
             }
 
             if (none.equals("null")) {
-                delay.setText("At the transfer stop: \nCurrent bus arrival time is: \n   " + cur + "\nNext bus arrival time is: \n   " + next);
+                delay.setText("At the transfer stop: \nCurrent bus arrival time is: \n   " + cur + "\nNext bus arrival time is: \n   " + next + "\nTransfer Stop ID is: \n   " + toid + "\nDestination Stop ID is: \n   " + odid );
             } else {
                 delay.setText(none);
             }
@@ -533,6 +537,36 @@ public class Login extends AppCompatActivity {
 
             System.out.println("rcHandler is working. " + val);
 
+            String ret = "";
+            try {
+                JSONArray jsonArray = new JSONArray(val);
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    JSONObject jsonObject = jsonArray.getJSONObject(i);
+                    ret = jsonObject.getString("b_route_decision");
+
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            if(dialog!=null) {
+                //dialog.dismiss();
+                dialog.setMessage(ret);
+            } else {
+                dialog = new AlertDialog.Builder(context)
+                        .setTitle("Notice")
+                        .setMessage(ret)
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+
+                            }
+                        })
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .show();
+            }
+
+            /*
+
             if (val.equals("route change")) {
 
                 new AlertDialog.Builder(context)
@@ -542,12 +576,7 @@ public class Login extends AppCompatActivity {
                             public void onClick(DialogInterface dialog, int which) {
 
                             }
-                        })/*
-                        .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                // do nothing
-                            }
-                        })*/
+                        })
                         .setIcon(android.R.drawable.ic_dialog_alert)
                         .show();
             }
@@ -555,7 +584,7 @@ public class Login extends AppCompatActivity {
                 Toast.makeText(Login.this, "The bus is arrived", Toast.LENGTH_LONG).show();
                 t.cancel();
                 t1.cancel();
-            }
+            }*/
 
         }
     };
